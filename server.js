@@ -47,7 +47,7 @@ app.post('/pay', (req, res) => pay.handlePay(req, res, db));
 app.post('/deposit', (req, res) => deposit.handleDeposit(req, res, db));
 
 // TOP ACTIVITY - GET
-app.post('/top_activity', (req, res) => top_activity.handleTopActivity(req, res, db));
+app.get('/top_activity', (req, res) => top_activity.handleTopActivity(req, res, db));
 
 // Listen on port
 const PORT = process.env.PORT;
