@@ -1,23 +1,24 @@
 const handleCreateAccount = (req, res, db) => {
-    const { timestamp, account_id } = req.query;
-    let new_account = null;
-    console.log(accounts);
-    try {
-        // Create a new account with a balance of 0 if it doesn't exist.
-        if (!accounts.some(account => account.account_id === account_id)) {
-            new_account = {
-                "account_id": account_id,
-                "timestamp": timestamp.toString(), 
-                "balance": 0
-            }
-            accounts.push(new_account);
+    const { account_id, timestamp } = req.query;
+
+    // Create account if it does not exist with a balance of 0.
+    db('accounts')
+    .select('*')
+    .where('account_id', '=', account_id)
+    .then(data => {
+        if (data.length === 0) {
+            db('accounts')
+            .insert({
+                account_id: account_id,
+                timestamp: timestamp,
+                balance: 0
+            })
+            .returning('*')
+            .then(data => res.status(201).send(data))
+        } else {
+            res.send("Account already exists.")
         }
-        // return "true"
-        res.send(new_account)
-    } catch (err) {
-        // return "false"
-        res.send("Account creation failed.")
-    }    
+    }).catch(err => res.status(400).json('Account creation failed.'));
 }
 
 module.exports = {

@@ -1,6 +1,4 @@
-const { accounts } = require('../data/accounts.json');
-
-const handleTopActivity = (req, res) => {
+const handleTopActivity = (req, res, db) => {
     const { n } = req.query;
     // Sort accounts by total transaction value in descending order, then by accountId alphabetically.
     const sorted_accounts = Object.entries(accounts).sort((a, b) => {
