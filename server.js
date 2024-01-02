@@ -32,7 +32,7 @@ const db = knex({
 //     console.log(data.rows);
 // });
 
-// Root
+// ROOT - GET
 app.get('/', (req, res) => {
     res.send('Hello, Welcome to Bank System Backend!');
 });

@@ -11,9 +11,12 @@ const handleDeposit = (req, res, db) => {
         } else {
             db('accounts')
             .where('account_id', '=', account_id)
-            .update({balance: data[0].balance + parseInt(amount)})
+            .update({
+                    balance: data[0].balance + parseInt(amount), 
+                    transaction_totals: data[0].transaction_totals + parseInt(amount)
+                })
             .returning('*')
-            .then(data => res.status(201).send(data))
+            .then(data => res.status(201).json(data))
             .catch(err => res.status(400).json('Deposit failed.'))
         }
     })

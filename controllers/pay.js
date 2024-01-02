@@ -11,9 +11,12 @@ const handlePay = (req, res, db) => {
         } else if (data[0].balance > parseInt(amount)) {
             db('accounts')
             .where('account_id', '=', account_id)
-            .update({balance: data[0].balance - parseInt(amount)})
+            .update({
+                balance: data[0].balance - parseInt(amount), 
+                transaction_totals: data[0].transaction_totals + parseInt(amount)
+            })
             .returning('*')
-            .then(data => res.status(201).send(data))
+            .then(data => res.status(201).json(data))
         } else {
             res.json('Insufficient funds.')
         }

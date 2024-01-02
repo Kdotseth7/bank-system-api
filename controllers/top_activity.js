@@ -4,7 +4,7 @@ const handleTopActivity = (req, res, db) => {
     // Sort accounts by total transaction value in descending order, then by accountId alphabetically.
     db('accounts')
     .select('*')
-    .orderBy('balance', 'desc')
+    .orderBy('transaction_totals', 'desc')
     .orderBy('account_id', 'asc')
     .limit(n)
     .then(data => res.status(201).json(data))
