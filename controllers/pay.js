@@ -9,17 +9,17 @@ const handlePay = (req, res, db) => {
         .select('*')
         .where('account_id', '=', account_id)
         .then(existingAccount => {
-            if (existingAccount.length === 0) {
+            if (!existingAccount.length) {
                 throw new Error("Account does not exist.");
-            } else if (existingAccount[0].balance >= parseInt(amount)) {
+            } else if (existingAccount[0].balance < parseInt(amount)) {
+                throw new Error("Insufficient funds.");
+            } else {
                 currentBalance = existingAccount[0].balance; // Retrieve the current balance
                 currentTransactionTotals = existingAccount[0].transaction_totals; // Retrieve the current transaction totals
                 return trx('query')
                 .select(trx.raw('MAX(timestamp) as max_timestamp'))
                 .where('account_id', '=', account_id)
                 .returning('max_timestamp')
-            } else {
-                throw new Error("Insufficient funds.");
             }
         })
         .then(max_timestamp => {
@@ -46,13 +46,11 @@ const handlePay = (req, res, db) => {
         })
         .then(data => {
             if (data) {
-                console.log(data);
                 trx.commit();
                 res.status(201).json(data);
             }
         })
         .catch(err => {
-            console.log(err);
             trx.rollback();
             if (err.message === "Account does not exist.") {
                 res.status(400).json(err.message);

@@ -44,13 +44,11 @@ const handleDeposit = (req, res, db) => {
         })
         .then(data => {
             if (data) {
-                console.log(data);
                 trx.commit();
                 res.status(201).json(data);
             }
         })
         .catch(err => {
-            console.log(err);
             trx.rollback();
             if (err.message === "Account does not exist.") {
                 res.status(400).json(err.message);

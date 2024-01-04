@@ -7,7 +7,7 @@ const handleCreateAccount = (req, res, db) => {
         .select('*')
         .where('account_id', '=', account_id)
         .then(existingAccount => {
-            if (existingAccount.length === 0) {
+            if (!existingAccount.length) {
                 return trx('query')
                 .insert({
                     account_id: account_id,
