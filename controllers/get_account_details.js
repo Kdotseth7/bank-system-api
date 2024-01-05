@@ -15,6 +15,7 @@ const handleGetAccountDetails = (req, res, db) => {
         db('query')
         .select('*')
         .where('account_id', '=', account_id)
+        .orderBy('timestamp', 'asc')
         .then(data => {
             response['transaction_history'] = data;
             res.status(201).json(response);
