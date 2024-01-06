@@ -10,7 +10,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ## Endpoints Overview
 
-### 1. CREATE ACCOUNT - POST `/create_account?account_id={{account_id}}`
+### 1. CREATE ACCOUNT - POST `accounts/create_account?account_id={{account_id}}`
 
 **Description:** Create a new bank account with the specified account ID.
 
@@ -19,7 +19,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ---
 
-### 2. DEPOSIT - POST `/deposit?account_id={{account_id}}&amount={{amount}}`
+### 2. DEPOSIT - POST `accounts/deposit?account_id={{account_id}}&amount={{amount}}`
 
 **Description:** Deposit a specified amount into an account.
 
@@ -29,7 +29,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ---
 
-### 3. PAY - POST `/pay?account_id={{account_id}}&amount={{amount}}`
+### 3. PAY - POST `accounts/pay?account_id={{account_id}}&amount={{amount}}`
 
 **Description:** Make a payment of a specified amount from an account.
 
@@ -39,7 +39,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ---
 
-### 4. TOP ACTIVITY - GET `/top_activity?n={{number}}`
+### 4. TOP ACTIVITY - GET `accounts/top_activity?n={{number}}`
 
 **Description:** Retrieve a list of the top 'n' accounts sorted by transaction activity.
 
@@ -48,7 +48,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ---
 
-### 5. TRANSFER - POST `/transfer?source_id={{source_id}}&target_id={{target_id}}&amount={{amount}}`
+### 5. TRANSFER - POST `transfers/transfer?source_id={{source_id}}&target_id={{target_id}}&amount={{amount}}`
 
 **Description:** Transfer a specified amount from a source account to a target account.
 
@@ -59,7 +59,7 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 
 ---
 
-### 6. ACCEPT TRANSFER - POST `/accept_transfer?account_id={{account_id}}&transfer_id={{transfer_id}}`
+### 6. ACCEPT TRANSFER - POST `transfers/accept_transfer?account_id={{account_id}}&transfer_id={{transfer_id}}`
 
 **Description:** Accept an incoming transfer to an account.
 
