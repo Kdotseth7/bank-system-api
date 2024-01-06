@@ -1,4 +1,6 @@
-const handleDeposit = (req, res, db) => {
+const db = require('../../../config/db');
+
+const handleDeposit = (req, res) => {
     const { account_id, amount } = req.query;
     let currentBalance = null;
     let currentTransactionTotals = null;

@@ -1,4 +1,6 @@
-const handleTransfer = (req, res, db) => {
+const db = require('../../../config/db');
+
+const handleTransfer = (req, res) => {
     const { source_id, target_id, amount } = req.query;
     let sourceAccountBalance = null;
     let transferTimestamp = null;

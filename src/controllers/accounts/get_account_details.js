@@ -1,4 +1,7 @@
-const handleGetAccountDetails = (req, res, db) => {
+const db = require('../../../config/db');
+
+
+const handleGetAccountDetails = (req, res) => {
     const { account_id } = req.query;
     let response = {};
 

@@ -1,4 +1,6 @@
-const handleAcceptTransfer = (req, res, db) => {
+const db = require('../../../config/db');
+
+const handleAcceptTransfer = (req, res) => {
     const { account_id, transfer_id } = req.query;
     let transferAmount = null;
     let sourceAccountId = null;

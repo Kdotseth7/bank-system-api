@@ -1,4 +1,6 @@
-const handleCreateAccount = (req, res, db) => {
+const db = require('../../../config/db');
+
+const handleCreateAccount = (req, res) => {
     const { account_id } = req.query;
 
     // Create account if it does not exist with a balance of 0.

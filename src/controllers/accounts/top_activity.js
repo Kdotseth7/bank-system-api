@@ -1,4 +1,6 @@
-const handleTopActivity = (req, res, db) => {
+const db = require('../../../config/db');
+
+const handleTopActivity = (req, res) => {
     const { n } = req.query;
 
     // Sort accounts by total transaction value in descending order, then by accountId alphabetically.
