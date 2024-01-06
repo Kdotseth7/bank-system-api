@@ -7,7 +7,6 @@ require('dotenv').config(
     { path: process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env.dev' }
 );
   
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,10 +17,9 @@ const transferRoutes = require('./src/routes/transferRoutes');
 app.use('/accounts', accountRoutes);
 app.use('/transfers', transferRoutes);
 
-
 // ROOT - GET
 app.get('/', (req, res) => {
-    res.send('Hello, Welcome to Bank System Backend!');
+    res.send('<h1>Hello, Welcome to Bank System Backend!</h1>');
 });
 
 // Listen on port

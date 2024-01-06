@@ -12,7 +12,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://{{BASE_URL}}:{{PORT}}/create_account?account_id=account1",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/create_account?account_id=account5",
 					"protocol": "http",
 					"host": [
 						"{{BASE_URL}}"
@@ -24,7 +24,7 @@
 					"query": [
 						{
 							"key": "account_id",
-							"value": "account1"
+							"value": "account5"
 						}
 					]
 				}
@@ -37,23 +37,24 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:{{PORT}}/deposit?account_id=account&amount=150",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/accounts/deposit?account_id=account55&amount=1000",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
+						"accounts",
 						"deposit"
 					],
 					"query": [
 						{
 							"key": "account_id",
-							"value": "account"
+							"value": "account55"
 						},
 						{
 							"key": "amount",
-							"value": "150"
+							"value": "1000"
 						}
 					]
 				}
@@ -66,23 +67,24 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:{{PORT}}/pay?account_id=account&amount=100",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/accounts/pay?account_id=account5&amount=50",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
+						"accounts",
 						"pay"
 					],
 					"query": [
 						{
 							"key": "account_id",
-							"value": "account"
+							"value": "account5"
 						},
 						{
 							"key": "amount",
-							"value": "100"
+							"value": "50"
 						}
 					]
 				}
@@ -95,13 +97,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:{{PORT}}/top_activity?n=5",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/accounts/top_activity?n=5",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
+						"accounts",
 						"top_activity"
 					],
 					"query": [
@@ -120,19 +123,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:{{PORT}}/top_activity?n=5",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/accounts/get_account_details?account_id=account5",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
-						"top_activity"
+						"accounts",
+						"get_account_details"
 					],
 					"query": [
 						{
-							"key": "n",
-							"value": "5"
+							"key": "account_id",
+							"value": "account5"
 						}
 					]
 				}
@@ -145,23 +149,24 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:{{PORT}}/transfer?source_id=account&target_id&amount=100",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/transfers/transfer?source_id=account1&target_id=account2&amount=100",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
+						"transfers",
 						"transfer"
 					],
 					"query": [
 						{
 							"key": "source_id",
-							"value": "account"
+							"value": "account1"
 						},
 						{
 							"key": "target_id",
-							"value": null
+							"value": "account2"
 						},
 						{
 							"key": "amount",
@@ -178,13 +183,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://{{BASE_URL}}:{{PORT}}/accept_transfer?account_id=account2&transfer_id=transfer3",
+					"raw": "http://{{BASE_URL}}:{{PORT}}/transfers/accept_transfer?account_id=account2&transfer_id=transfer2",
 					"protocol": "http",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"port": "{{PORT}}",
 					"path": [
+						"transfers",
 						"accept_transfer"
 					],
 					"query": [
@@ -194,7 +200,7 @@
 						},
 						{
 							"key": "transfer_id",
-							"value": "transfer3"
+							"value": "transfer2"
 						}
 					]
 				}
@@ -225,7 +231,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "54.244.205.65",
+			"value": "localhost",
 			"type": "string"
 		},
 		{
