@@ -3,9 +3,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config(
-    { path: process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env.dev' }
-);
   
 // Middleware
 app.use(cors());
