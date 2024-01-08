@@ -7,17 +7,17 @@ pipeline {
         EC2_IP = 'ec2-54-244-205-65.us-west-2.compute.amazonaws.com'
         EC2_USER = 'ubuntu'
         REMOTE_DIRECTORY = 'repos'
-        SSH_KEY_ID = 'bank-system-ec2-ssh-key' // The ID you gave to the SSH private key in Jenkins' credentials store
+        SSH_KEY_ID = 'ec2-ssh-key' // The ID you gave to the SSH private key in Jenkins' credentials store
     }
 
     stages {
         stage('Build') {
             steps {
-                sshagent(credentials: [SSH_KEY_ID]) {
+                sshagent(credentials: [env.SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance and pull the latest code
-                            sh "ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                            sh "ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_IP} 'cd ${env.REMOTE_DIRECTORY} && git pull'"
                         } catch (Exception e) {
                             // Handle errors related to the Build stage
                             echo "Error in Build stage: ${e.getMessage()}"
@@ -30,13 +30,13 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(credentials: [SSH_KEY_ID]) {
+                sshagent(credentials: [env.SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance, install dependencies, and start the application using PM2
                             sh """
-                                ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} '
-                                    cd ${REMOTE_DIRECTORY} &&
+                                ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_IP} '
+                                    cd ${env.REMOTE_DIRECTORY} &&
                                     npm install &&
                                     npx pm2 start npm --name "bank-system-api" -- start
                                 '
@@ -53,11 +53,11 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sshagent(credentials: [SSH_KEY_ID]) {
+                sshagent(credentials: [env.SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance and run tests
-                            sh "ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                            sh "ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_IP} 'cd ${env.REMOTE_DIRECTORY} && npm test'"
                         } catch (Exception e) {
                             // Handle errors related to the Run Tests stage
                             echo "Error in Run Tests stage: ${e.getMessage()}"
