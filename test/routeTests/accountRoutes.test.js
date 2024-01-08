@@ -2,10 +2,13 @@ const request = require('supertest');
 const app = require('../../server');
 const { expect } = require('chai');
 const knex = require('../../config/db');
+const db = require('../../config/db');
 
 describe('Test create_account endpoint', () => {
 
     const acc_id = 'test_account_' + Math.floor(Math.random() * 1000);
+
+    console.log(db.raw('SELECT * FROM accounts').then(data => console.log(data.rows)));
 
     describe('POST /accounts/create_account', () => {
         it('should create a new account', (done) => {
