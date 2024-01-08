@@ -90,23 +90,34 @@ pipeline {
             script {
                 try {
                     sh 'echo "Sending email notification for build!"'
-                    // Actions to always take
-                    def status = currentBuild.currentResult ?: 'SUCCESS'
-                    mail to: 'kushagraseth.1996@gmail.com',
-                        subject: "Pipeline: ${currentBuild.fullDisplayName}",
-                        body: """<h2>Build Information:</h2>
+                    // Use the emailext function to send an HTML email
+                    emailext(
+                        to: 'kushagraseth.1996@gmail.com',
+                        subject: "Build Status: ${PROJECT_NAME} - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}!",
+                        mimeType: 'text/html', // Specify that the content type of the email is HTML
+                        body: """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+                                <html>
+                                <head>
+                                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                                <title>Build Status</title>
+                                </head>
+                                <body>
+                                <h2>Build Information:</h2>
                                 <ul>
-                                    <li><b>Status:</b> ${status}</li>
-                                    <li><b>Job Name:</b> ${env.JOB_NAME}</li>
-                                    <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
-                                    <li><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
+                                    <li><strong>Status:</strong> ${currentBuild.currentResult}</li>
+                                    <li><strong>Job Name:</strong> ${env.JOB_NAME}</li>
+                                    <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                                    <li><strong>Build URL:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
                                 </ul>
                                 <h2>Changes:</h2>
-                                <p>${currentBuild.changeSets}</p>
+                                ${currentBuild.changeSets.collect{ it.items.collect { change -> change.msg.escapeHtml() }.join('<br>') }.join('<br>')}
                                 <h2>Console Output:</h2>
                                 <p><a href="${env.BUILD_URL}console">View Console Output</a></p>
                                 <h3>Note:</h3>
-                                <p>Check the console output for more details on the build process.</p>"""
+                                <p>Check the console output for more details on the build process.</p>
+                                </body>
+                                </html>"""
+                    )
                 } catch (Exception e) {
                     // Handle errors related to sending emails
                     echo "Failed to send email: ${e.getMessage()}"
