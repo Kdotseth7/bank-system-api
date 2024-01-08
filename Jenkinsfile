@@ -114,7 +114,9 @@ pipeline {
                                 <h3>Note:</h3>
                                 <p>Check the console output for more details on the build process.</p>
                                 </body>
-                                </html>"""
+                                </html>
+                            """, 
+                        attachLog: true, // Attach the console output to the email
                     )
                 } catch (Exception e) {
                     // Handle errors related to sending emails
