@@ -91,9 +91,22 @@ pipeline {
                 try {
                     sh 'echo "Sending email notification for build!"'
                     // Actions to always take
+                    def status = currentBuild.currentResult ?: 'SUCCESS'
                     mail to: 'kushagraseth.1996@gmail.com',
-                         subject: "Pipeline: ${currentBuild.fullDisplayName}",
-                         body: "Click to view build -> ${env.BUILD_URL}."
+                        subject: "Pipeline: ${currentBuild.fullDisplayName}",
+                        body: """<h2>Build Information:</h2>
+                                <ul>
+                                    <li><b>Status:</b> ${status}</li>
+                                    <li><b>Job Name:</b> ${env.JOB_NAME}</li>
+                                    <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
+                                    <li><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
+                                </ul>
+                                <h2>Changes:</h2>
+                                <p>${currentBuild.changeSets}</p>
+                                <h2>Console Output:</h2>
+                                <p><a href="${env.BUILD_URL}console">View Console Output</a></p>
+                                <h3>Note:</h3>
+                                <p>Check the console output for more details on the build process.</p>"""
                 } catch (Exception e) {
                     // Handle errors related to sending emails
                     echo "Failed to send email: ${e.getMessage()}"
