@@ -13,11 +13,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sshagent([SSH_KEY_ID]) {
+                sshagent(credentials: [SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance and pull the latest code
-                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                            sh "ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
                         } catch (Exception e) {
                             // Handle errors related to the Build stage
                             echo "Error in Build stage: ${e.getMessage()}"
@@ -30,12 +30,12 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent([SSH_KEY_ID]) {
+                sshagent(credentials: [SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance, install dependencies, and start the application using PM2
                             sh """
-                                ssh ${EC2_USER}@${EC2_IP} '
+                                ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} '
                                     cd ${REMOTE_DIRECTORY} &&
                                     npm install &&
                                     npx pm2 start npm --name "bank-system-api" -- start
@@ -53,11 +53,11 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sshagent([SSH_KEY_ID]) {
+                sshagent(credentials: [SSH_KEY_ID]) {
                     script {
                         try {
                             // SSH into the EC2 instance and run tests
-                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                            sh "ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
                         } catch (Exception e) {
                             // Handle errors related to the Run Tests stage
                             echo "Error in Run Tests stage: ${e.getMessage()}"
