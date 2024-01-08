@@ -1,8 +1,9 @@
 const Mocha = require('mocha');
 const http = require('http');
 const fg = require('fast-glob'); // Importing fast-glob instead of glob
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
+const app = require('../server');
 
 // Configuration for Mocha: global timeout and retries
 const mocha = new Mocha({
@@ -10,16 +11,16 @@ const mocha = new Mocha({
     retries: 2      // Global retry count for all tests.
 });
 
-// Specify the port
-const PORT = 3003;
+// // Specify the port
+// const PORT = 3003;
 
 // Create an HTTP server with your application
 const server = http.createServer(app);
 
 // Start the server on the specified port
-server.listen(PORT, () => {
-    console.log(`Test server listening on port ${PORT}`);
-});
+// server.listen(PORT, () => {
+//     console.log(`Test server listening on port ${PORT}`);
+// });
 
 // Handle server errors (like port already in use)
 server.on('error', (error) => {
