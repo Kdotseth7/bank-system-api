@@ -13,13 +13,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Using SSH Agent to handle the private key
-                    sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance and pull the latest code
-                        def buildCmd = "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                sshagent([SSH_KEY_ID]) {
+                    script {
                         try {
-                            sh buildCmd
+                            // SSH into the EC2 instance and pull the latest code
+                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
                         } catch (Exception e) {
                             // Handle errors related to the Build stage
                             echo "Error in Build stage: ${e.getMessage()}"
@@ -32,18 +30,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance, install dependencies, and start the application using PM2
-                        def deployCmd = """
-                            ssh ${EC2_USER}@${EC2_IP} '
-                                cd ${REMOTE_DIRECTORY} &&
-                                npm install &&
-                                npx pm2 start npm --name "bank-system-api" -- start
-                            '
-                        """
+                sshagent([SSH_KEY_ID]) {
+                    script {
                         try {
-                            sh deployCmd
+                            // SSH into the EC2 instance, install dependencies, and start the application using PM2
+                            sh """
+                                ssh ${EC2_USER}@${EC2_IP} '
+                                    cd ${REMOTE_DIRECTORY} &&
+                                    npm install &&
+                                    npx pm2 start npm --name "bank-system-api" -- start
+                                '
+                            """
                         } catch (Exception e) {
                             // Handle errors related to the Deploy stage
                             echo "Error in Deploy stage: ${e.getMessage()}"
@@ -56,12 +53,11 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                script {
-                    sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance and run tests
-                        def testCmd = "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                sshagent([SSH_KEY_ID]) {
+                    script {
                         try {
-                            sh testCmd
+                            // SSH into the EC2 instance and run tests
+                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
                         } catch (Exception e) {
                             // Handle errors related to the Run Tests stage
                             echo "Error in Run Tests stage: ${e.getMessage()}"
@@ -91,15 +87,17 @@ pipeline {
             )
         }
         always {
-            try {
-                sh 'echo "Sending email notification for build!"'
-                // Actions to always take
-                mail to: 'kushagraseth.1996@gmail.com',
-                     subject: "Pipeline: ${currentBuild.fullDisplayName}",
-                     body: "Click to view build -> ${env.BUILD_URL}."
-            } catch (Exception e) {
-                // Handle errors related to sending emails
-                echo "Failed to send email: ${e.getMessage()}"
+            script {
+                try {
+                    sh 'echo "Sending email notification for build!"'
+                    // Actions to always take
+                    mail to: 'kushagraseth.1996@gmail.com',
+                         subject: "Pipeline: ${currentBuild.fullDisplayName}",
+                         body: "Click to view build -> ${env.BUILD_URL}."
+                } catch (Exception e) {
+                    // Handle errors related to sending emails
+                    echo "Failed to send email: ${e.getMessage()}"
+                }
             }
         }
     }
