@@ -70,5 +70,6 @@ pipeline {
             mail to: 'kushagraseth.1996@gmail.com',
              subject: "Pipeline: ${currentBuild.fullDisplayName}",
              body: "Click to view build -> ${env.BUILD_URL}."
+        }
     }
 }
