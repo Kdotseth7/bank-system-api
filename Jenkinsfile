@@ -93,7 +93,7 @@ pipeline {
                     // Use the emailext function to send an HTML email
                     emailext(
                         to: 'kushagraseth.1996@gmail.com',
-                        subject: "Build Status: ${env.PROJECT_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}!",
+                        subject: "Build Status: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
                         mimeType: 'text/html', // Specify that the content type of the email is HTML
                         body: """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                                 <html>
