@@ -110,7 +110,7 @@ pipeline {
                                     <li><strong>Build URL:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
                                 </ul>
                                 <h2>Changes:</h2>
-                                ${currentBuild.changeSets.collect{ it.items.collect { change -> change.msg.escapeHtml() }.join('<br>') }.join('<br>')}
+                                ${currentBuild.changeSets.collect{ it.items.collect { change -> Util.escapeHtml(change.msg) }.join('<br>') }.join('<br>')}
                                 <h2>Console Output:</h2>
                                 <p><a href="${env.BUILD_URL}console">View Console Output</a></p>
                                 <h3>Note:</h3>
