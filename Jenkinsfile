@@ -34,8 +34,14 @@ pipeline {
                 script {
                     sshagent([SSH_KEY_ID]) {
                         try {
-                            // SSH into the EC2 instance and restart the server
-                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm install && pm2 restart all'"
+                            // SSH into the EC2 instance, install dependencies, and start the application using PM2
+                            sh """
+                                ssh ${EC2_USER}@${EC2_IP} '
+                                    cd ${REMOTE_DIRECTORY} &&
+                                    npm install &&
+                                    npx pm2 start npm --name "bank-system-api" -- start
+                                '
+                            """
                         } catch (Exception e) {
                             // Handle errors related to the Deploy stage
                             echo "Error in Deploy stage: ${e.getMessage()}"
