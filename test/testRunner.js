@@ -1,7 +1,8 @@
 const Mocha = require('mocha');
 const http = require('http');
 const fg = require('fast-glob'); // Importing fast-glob instead of glob
-const app = require('../server');
+const express = require('express');
+const app = express();
 
 // Configuration for Mocha: global timeout and retries
 const mocha = new Mocha({
