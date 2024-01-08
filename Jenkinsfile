@@ -16,8 +16,14 @@ pipeline {
                 script {
                     // Using SSH Agent to handle the private key
                     sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance and pull the latest code
-                        sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                        try {
+                            // SSH into the EC2 instance and pull the latest code
+                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                        } catch (Exception e) {
+                            // Handle errors related to the Build stage
+                            echo "Error in Build stage: ${e.getMessage()}"
+                            error("Failing the build due to an error in the Build stage")
+                        }
                     }
                 }
             }
@@ -27,8 +33,14 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance and restart the server
-                        sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm install && pm2 restart all'"
+                        try {
+                            // SSH into the EC2 instance and restart the server
+                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm install && pm2 restart all'"
+                        } catch (Exception e) {
+                            // Handle errors related to the Deploy stage
+                            echo "Error in Deploy stage: ${e.getMessage()}"
+                            error("Failing the build due to an error in the Deploy stage")
+                        }
                     }
                 }
             }
@@ -38,8 +50,14 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_KEY_ID]) {
-                        // SSH into the EC2 instance and run tests
-                        sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                        try {
+                            // SSH into the EC2 instance and run tests
+                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                        } catch (Exception e) {
+                            // Handle errors related to the Run Tests stage
+                            echo "Error in Run Tests stage: ${e.getMessage()}"
+                            error("Failing the build due to an error in the Run Tests stage")
+                        }
                     }
                 }
             }
@@ -47,7 +65,6 @@ pipeline {
     }
 
     post {
-        // Define actions to take based on the outcome of the pipeline
         success {
             // Actions to take on success
             sh 'echo "Successful Build!"'
@@ -58,18 +75,23 @@ pipeline {
         }
         failure {
             // Actions to take on failure
-            sh 'echo "Successful Failed!"'
+            sh 'echo "Build Failed!"'
             slackSend (
                 color: 'danger',  // 'danger' is a Slack color for red
                 message: "FAILURE: BUILD ${env.BUILD_NUMBER} failed. Check details: ${env.BUILD_URL}"
             )
         }
         always {
-            sh 'echo "Sending email notification for build!"'
-            // Actions to always take
-            mail to: 'kushagraseth.1996@gmail.com',
-             subject: "Pipeline: ${currentBuild.fullDisplayName}",
-             body: "Click to view build -> ${env.BUILD_URL}."
+            try {
+                sh 'echo "Sending email notification for build!"'
+                // Actions to always take
+                mail to: 'kushagraseth.1996@gmail.com',
+                     subject: "Pipeline: ${currentBuild.fullDisplayName}",
+                     body: "Click to view build -> ${env.BUILD_URL}."
+            } catch (Exception e) {
+                // Handle errors related to sending emails
+                echo "Failed to send email: ${e.getMessage()}"
+            }
         }
     }
 }
