@@ -16,9 +16,10 @@ pipeline {
                 script {
                     // Using SSH Agent to handle the private key
                     sshagent([SSH_KEY_ID]) {
+                        // SSH into the EC2 instance and pull the latest code
+                        def buildCmd = "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
                         try {
-                            // SSH into the EC2 instance and pull the latest code
-                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && git pull'"
+                            sh buildCmd
                         } catch (Exception e) {
                             // Handle errors related to the Build stage
                             echo "Error in Build stage: ${e.getMessage()}"
@@ -33,15 +34,16 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_KEY_ID]) {
+                        // SSH into the EC2 instance, install dependencies, and start the application using PM2
+                        def deployCmd = """
+                            ssh ${EC2_USER}@${EC2_IP} '
+                                cd ${REMOTE_DIRECTORY} &&
+                                npm install &&
+                                npx pm2 start npm --name "bank-system-api" -- start
+                            '
+                        """
                         try {
-                            // SSH into the EC2 instance, install dependencies, and start the application using PM2
-                            sh """
-                                ssh ${EC2_USER}@${EC2_IP} '
-                                    cd ${REMOTE_DIRECTORY} &&
-                                    npm install &&
-                                    npx pm2 start npm --name "bank-system-api" -- start
-                                '
-                            """
+                            sh deployCmd
                         } catch (Exception e) {
                             // Handle errors related to the Deploy stage
                             echo "Error in Deploy stage: ${e.getMessage()}"
@@ -56,9 +58,10 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_KEY_ID]) {
+                        // SSH into the EC2 instance and run tests
+                        def testCmd = "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
                         try {
-                            // SSH into the EC2 instance and run tests
-                            sh "ssh ${EC2_USER}@${EC2_IP} 'cd ${REMOTE_DIRECTORY} && npm test'"
+                            sh testCmd
                         } catch (Exception e) {
                             // Handle errors related to the Run Tests stage
                             echo "Error in Run Tests stage: ${e.getMessage()}"
