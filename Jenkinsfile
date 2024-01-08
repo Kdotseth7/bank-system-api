@@ -4,14 +4,14 @@ pipeline {
 
     environment {
         // Define the necessary environment variables
-        EC2_IP = 'your-ec2-ip'
-        EC2_USER = 'your-ec2-user' // usually 'ec2-user' or 'ubuntu'
-        REMOTE_DIRECTORY = '/path/to/your/project' // The directory of your project on the EC2 instance
-        SSH_KEY_ID = 'id_of_your_ssh_private_key_in_jenkins' // The ID you gave to the SSH private key in Jenkins' credentials store
+        EC2_IP = 'ec2-54-244-205-65.us-west-2.compute.amazonaws.com'
+        EC2_USER = 'ubuntu'
+        REMOTE_DIRECTORY = 'repos'
+        SSH_KEY_ID = 'bank-system-ec2-ssh-key' // The ID you gave to the SSH private key in Jenkins' credentials store
     }
 
     stages {
-        stage('Pull Latest Code') {
+        stage('Build') {
             steps {
                 script {
                     // Using SSH Agent to handle the private key
@@ -65,6 +65,7 @@ pipeline {
             )
         }
         always {
+            sh 'echo "Sending email notification for build!"'
             // Actions to always take
             mail to: 'kushagraseth.1996@gmail.com',
              subject: "Pipeline: ${currentBuild.fullDisplayName}",
