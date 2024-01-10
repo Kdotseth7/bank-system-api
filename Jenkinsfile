@@ -4,7 +4,7 @@ pipeline {
 
     environment {
         // Define the necessary environment variables
-        EC2_IP = 'ec2-54-244-205-65.us-west-2.compute.amazonaws.com'
+        EC2_IP = 'ec2-54-68-233-161.us-west-2.compute.amazonaws.com'
         EC2_USER = 'ubuntu'
         REMOTE_DIRECTORY = 'repos/bank-system-api'
         SSH_KEY_ID = 'ec2-ssh-key' // The ID you gave to the SSH private key in Jenkins' credentials store
