@@ -12,7 +12,7 @@ Its been deployed using AWS EC2 Instance and used AWS RDS instance as its Databa
 
 ## Endpoints Overview
 
-### <u>BASE URL of AWS EC2 Instance</u> -> **54.68.233.161**
+### *BASE URL of AWS EC2 Instance*</u> -> **54.68.233.161**
 
 ### 1. CREATE ACCOUNT - POST `accounts/create_account?account_id={{account_id}}`
 
