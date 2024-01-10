@@ -2,6 +2,8 @@
 
 Welcome to the Bank System API Documentation. Developed using Express.js, Node.js, and Knex.js, this API provides a powerful platform for managing bank operations including account creation, transactions, and inquiries.
 
+Its been deployed using AWS EC2 Instance and used AWS RDS instance as its Database. I have also developed a Jenkins Pipeline that Builds, Deploys and Runs tests for this backend server.
+
 ## Technologies Used
 
 - **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine.
@@ -9,6 +11,8 @@ Welcome to the Bank System API Documentation. Developed using Express.js, Node.j
 - **Knex.js**: A SQL query builder for JavaScript, used to interact with the database, PSQL in this case.
 
 ## Endpoints Overview
+
+### <u>BASE URL of AWS EC2 Instance</u> -> **54.68.233.161**
 
 ### 1. CREATE ACCOUNT - POST `accounts/create_account?account_id={{account_id}}`
 
