@@ -1,4 +1,4 @@
-# Egen Bank System API Documentation
+# Bank System API Documentation
 
 Welcome to the Bank System API Documentation. Developed using Express.js, Node.js, and Knex.js, this API provides a powerful platform for managing bank operations including account creation, transactions, and inquiries.
 
